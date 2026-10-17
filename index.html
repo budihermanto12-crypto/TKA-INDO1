@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CBT Try Out TKA 2026 Bahasa Indonesia - Kapanewon Berbah</title>
+    <!-- Tailwind CSS for modern responsive styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter & Cinzel -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-cert { font-family: 'Cinzel', serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .reading-modal { transition: all 0.3s ease-in-out; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased select-none">
+
+<header class="bg-indigo-700 text-white shadow-md sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <div class="bg-white/10 p-2 rounded-lg">
+                <i class="fa-solid fa-graduation-cap text-2xl text-amber-300"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-lg leading-tight">CBT TKA 2026 - BAHASA INDONESIA</h1>
+                <p class="text-xs text-indigo-200">Latihan Tes Kemampuan Akademik SD/MI - Paket 1 (Berbah)</p>
+            </div>
+        </div>
+        
+        <div id="topControls" class="hidden flex items-center space-x-4">
+            <div class="flex items-center bg-indigo-800/80 rounded-lg p-1 text-xs border border-indigo-500/30">
+                <span class="px-2 text-indigo-200 font-medium">Ukuran Teks:</span>
+                <button onclick="changeFontSize(-1)" class="w-7 h-7 bg-indigo-600 hover:bg-indigo-500 rounded text-white font-bold transition" title="Kecilkan Teks">A-</button>
+                <button onclick="changeFontSize(0)" class="w-7 h-7 bg-indigo-600 hover:bg-indigo-500 rounded text-white font-bold mx-1 transition" title="Ukuran Normal">A</button>
+                <button onclick="changeFontSize(1)" class="w-7 h-7 bg-indigo-600 hover:bg-indigo-500 rounded text-white font-bold transition" title="Besarkan Teks">A+</button>
+            </div>
+
+            <button onclick="togglePassageModal()" class="bg-amber-500 hover:bg-amber-600 text-slate-900 font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center shadow transition">
+                <i class="fa-solid fa-book-open mr-1.5"></i> Bacaan Soal
+            </button>
+
+            <div class="hidden sm:flex items-center bg-emerald-500/20 text-emerald-200 border border-emerald-500/30 px-3 py-1.5 rounded-lg text-xs">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse mr-2"></span>
+                <span>Pengawas Aktif</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="flex-1 max-w-7xl w-full mx-auto p-4 flex flex-col justify-center">
+    <!-- Student Identity Section -->
+    <div id="dashboardSection" class="max-w-md mx-auto w-full bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden my-auto">
+        <div class="bg-gradient-to-r from-indigo-600 to-blue-600 p-6 text-white text-center">
+            <i class="fa-solid fa-id-card text-4xl mb-2 text-indigo-200"></i>
+            <h2 class="text-2xl font-bold">Identitas Peserta</h2>
+            <p class="text-indigo-100 text-xs mt-1">Masukkan data lengkap untuk pengiriman nilai otomatis dan pencetakan sertifikat.</p>
+        </div>
+        
+        <form id="startForm" onsubmit="startExam(event)" class="p-6 space-y-4">
+            <div>
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Nama Lengkap Siswa</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                        <i class="fa-solid fa-user"></i>
+                    </span>
+                    <input type="text" id="studentName" required placeholder="Contoh: Muhammad Bintang Pratama" 
+                        class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm outline-none">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Nomor Absen / NISN</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                        <i class="fa-solid fa-hashtag"></i>
+                    </span>
+                    <input type="text" id="studentAbsen" required placeholder="Contoh: 18" 
+                        class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm outline-none">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Sekolah / Madrasah</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                        <i class="fa-solid fa-school"></i>
+                    </span>
+                    <input type="text" id="studentSchool" required placeholder="Contoh: SD Negeri Berbah 1" 
+                        class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm outline-none">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Email Peserta / Orang Tua (Opsional)</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                        <i class="fa-solid fa-envelope"></i>
+                    </span>
+                    <input type="email" id="studentEmail" placeholder="Contoh: siswa@sekolah.sch.id" 
+                        class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm outline-none">
+                </div>
+            </div>
+
+            <div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r-lg text-amber-900 text-xs leading-relaxed space-y-1">
+                <p class="font-bold flex items-center"><i class="fa-solid fa-triangle-exclamation mr-1.5"></i> Informasi Sistem:</p>
+                <ul class="list-disc pl-4 space-y-0.5">
+                    <li>Semua rincian jawaban & skor akan otomatis dikirim ke endpoint <strong>Formspree</strong> (dan PHP backend).</li>
+                    <li>Sistem dilengkapi fitur <strong>Anti-Nyontek</strong>. Dilarang berpindah tab melebihi <strong>10 detik</strong>!</li>
+                </ul>
+            </div>
+
+            <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg shadow-lg hover:shadow-indigo-500/30 transition duration-200 text-sm flex items-center justify-center space-x-2">
+                <span>Mulai Kerjakan Soal</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </form>
+    </div>
+
+    <div id="quizSection" class="hidden flex-1 flex flex-col md:flex-row gap-4 h-full">
+        <!-- Main Quiz Display Window -->
+        <div class="flex-1 flex flex-col bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
+            <div class="bg-slate-100 border-b border-slate-200 px-4 py-3 flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <button onclick="toggleSidebar()" class="bg-indigo-600 text-white p-2 rounded-lg hover:bg-indigo-700 transition" title="Buka/Tutup Navigasi Soal">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <span id="currentQuestionBadge" class="bg-indigo-100 text-indigo-800 font-bold px-3 py-1 rounded-lg text-sm border border-indigo-200">
+                        Soal #1
+                    </span>
+                    <span id="questionTypeBadge" class="bg-slate-200 text-slate-700 text-xs px-2.5 py-1 rounded-md font-medium">
+                        Pilihan Ganda
+                    </span>
+                </div>
+
+                <div id="studentInfoTag" class="text-xs text-slate-600 font-medium hidden sm:block"></div>
+            </div>
+
+            <div id="questionBodyContainer" class="flex-1 p-5 md:p-8 overflow-y-auto max-h-[calc(100vh-220px)] transition-all">
+                <div id="passageBox" class="mb-6 p-4 bg-indigo-50/60 border border-indigo-100 rounded-xl text-slate-700 hidden">
+                    <h4 id="passageTitle" class="font-bold text-indigo-900 border-b border-indigo-200 pb-1 mb-2 text-sm flex items-center">
+                        <i class="fa-solid fa-file-lines mr-2 text-indigo-600"></i> Naskah Bacaan
+                    </h4>
+                    <div id="passageContent" class="text-slate-800 leading-relaxed text-sm whitespace-pre-line max-h-56 overflow-y-auto pr-2"></div>
+                </div>
+
+                <div id="questionText" class="font-semibold text-slate-900 leading-relaxed mb-6"></div>
+                <div id="optionsContainer" class="space-y-3"></div>
+            </div>
+
+            <div class="bg-slate-100 border-t border-slate-200 px-4 py-3 flex justify-between items-center">
+                <button id="btnPrev" onclick="navigateQuestion(-1)" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-sm font-semibold transition disabled:opacity-40 disabled:cursor-not-allowed flex items-center space-x-1">
+                    <i class="fa-solid fa-chevron-left text-xs"></i> <span>Sebelumnya</span>
+                </button>
+
+                <button id="btnPassageView" onclick="togglePassageModal()" class="px-3 py-2 bg-amber-100 text-amber-800 hover:bg-amber-200 rounded-lg text-xs font-medium transition flex items-center space-x-1">
+                    <i class="fa-solid fa-book-open"></i> <span>Teks Bacaan</span>
+                </button>
+
+                <button id="btnNext" onclick="navigateQuestion(1)" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold transition flex items-center space-x-1">
+                    <span>Berikutnya</span> <i class="fa-solid fa-chevron-right text-xs"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Question Grid Navigation -->
+        <div id="sidebarNav" class="w-full md:w-72 bg-white rounded-xl shadow-md border border-slate-200 p-4 flex flex-col justify-between transition-all duration-300">
+            <div>
+                <div class="flex justify-between items-center border-b border-slate-200 pb-3 mb-3">
+                    <h3 class="font-bold text-slate-800 text-sm flex items-center">
+                        <i class="fa-solid fa-th mr-2 text-indigo-600"></i> Navigasi Soal
+                    </h3>
+                    <button onclick="toggleSidebar()" class="text-slate-400 hover:text-slate-600 md:hidden">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+
+                <div id="questionGrid" class="grid grid-cols-5 gap-2 max-h-72 md:max-h-96 overflow-y-auto p-1"></div>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-200 space-y-3">
+                <div class="grid grid-cols-2 gap-1 text-[11px] text-slate-600">
+                    <span class="flex items-center"><span class="w-3 h-3 bg-indigo-600 rounded mr-1"></span> Terjawab</span>
+                    <span class="flex items-center"><span class="w-3 h-3 bg-slate-200 border border-slate-400 rounded mr-1"></span> Belum</span>
+                </div>
+                <button onclick="confirmFinishExam()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-sm shadow transition flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-check-circle"></i>
+                    <span>Selesaikan Ujian</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="resultSection" class="hidden max-w-3xl mx-auto w-full bg-white rounded-2xl shadow-xl border border-slate-200 p-6 md:p-8">
+        <div id="resultHeader" class="text-center pb-6 border-b border-slate-200"></div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 my-6">
+            <div class="bg-indigo-50 border border-indigo-100 p-4 rounded-xl text-center">
+                <span class="text-xs text-indigo-600 font-semibold block uppercase">Skor Akhir</span>
+                <span id="scoreVal" class="text-3xl font-extrabold text-indigo-900">0</span>
+            </div>
+            <div class="bg-emerald-50 border border-emerald-100 p-4 rounded-xl text-center">
+                <span class="text-xs text-emerald-600 font-semibold block uppercase">Benar</span>
+                <span id="correctVal" class="text-3xl font-extrabold text-emerald-700">0</span>
+            </div>
+            <div class="bg-rose-50 border border-rose-100 p-4 rounded-xl text-center">
+                <span class="text-xs text-rose-600 font-semibold block uppercase">Salah</span>
+                <span id="wrongVal" class="text-3xl font-extrabold text-rose-700">0</span>
+            </div>
+            <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl text-center">
+                <span class="text-xs text-slate-500 font-semibold block uppercase">Target Minimal</span>
+                <span class="text-3xl font-extrabold text-slate-700">80</span>
+            </div>
+        </div>
+
+        <div id="resultActions" class="flex flex-col sm:flex-row gap-3 justify-center mt-6"></div>
+
+        <!-- Automated & Manual Submission to Formspree -->
+        <div class="mt-8 pt-6 border-t border-slate-200">
+            <h3 class="text-sm font-bold text-slate-800 mb-2 flex items-center">
+                <i class="fa-solid fa-paper-plane text-indigo-600 mr-2"></i> Laporan Pengiriman Ke Formspree & Server PHP
+            </h3>
+            <p class="text-xs text-slate-500 mb-4">Sistem secara otomatis mengirimkan rincian lengkap lembar jawaban siswa ke Formspree dan endpoint PHP backend.</p>
+
+            <form id="formspreeForm" onsubmit="submitFormspree(event)" class="space-y-3">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <input type="text" id="fsName" name="nama_siswa" readonly class="bg-slate-100 text-slate-600 p-2.5 rounded-lg border text-xs font-medium">
+                    <input type="text" id="fsSchool" name="sekolah" readonly class="bg-slate-100 text-slate-600 p-2.5 rounded-lg border text-xs font-medium">
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <input type="text" id="fsScore" name="skor_akhir" readonly class="bg-slate-100 text-slate-600 p-2.5 rounded-lg border text-xs font-medium">
+                    <input type="email" id="fsEmail" name="email_peserta" placeholder="Email Peserta" class="p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-xs outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <!-- Complete Answer Payload in JSON Format -->
+                <textarea id="fsDetailAnswers" name="rincian_jawaban_json" rows="3" readonly class="w-full p-2.5 bg-slate-100 text-slate-600 border border-slate-300 rounded-lg text-[11px] font-mono outline-none"></textarea>
+
+                <textarea id="fsMessage" name="catatan_masukan" rows="2" placeholder="Tuliskan pesan atau catatan tambahan (Opsional)..." class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-xs outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+
+                <button type="submit" id="fsSubmitBtn" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg text-xs transition flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span>Kirim Ulang Hasil Manual ke Formspree</span>
+                </button>
+            </form>
+            <div id="fsStatusMsg" class="hidden mt-3 p-3 rounded-lg text-xs text-center font-medium"></div>
+        </div>
+    </div>
+</main>
+
+<div id="passageModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex justify-center items-center p-4 hidden">
+    <div class="bg-white w-full max-w-3xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+        <div class="bg-indigo-700 text-white px-6 py-4 flex justify-between items-center">
+            <h3 class="font-bold text-base flex items-center">
+                <i class="fa-solid fa-book-open mr-2 text-amber-300"></i> Pustaka Teks Bacaan
+            </h3>
+            <button onclick="togglePassageModal()" class="text-indigo-200 hover:text-white transition">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+        <div class="p-6 overflow-y-auto space-y-6 text-sm leading-relaxed text-slate-800">
+            <div class="border-b border-slate-200 pb-4">
+                <h4 class="font-bold text-indigo-900 mb-1">1. Jenderal Soedirman</h4>
+                <p class="bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs whitespace-pre-line">
+Jenderal Soedirman adalah sosok pahlawan besar yang namanya tak lekang oleh waktu dalam sejarah perjuangan bangsa Indonesia. Ia dikenal sebagai Panglima Besar Tentara Nasional Indonesia (TNI). Ia memimpin perjuangan rakyat melawan penjajah.
+                </p>
+            </div>
+        </div>
+        <div class="bg-slate-100 px-6 py-3 border-t border-slate-200 text-right">
+            <button onclick="togglePassageModal()" class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg text-xs hover:bg-indigo-700">Tutup</button>
+        </div>
+    </div>
+</div>
+
+<div id="cheatOverlay" class="fixed inset-0 bg-rose-950/90 backdrop-blur-md z-50 flex flex-col justify-center items-center p-6 text-white text-center hidden">
+    <div class="bg-rose-900 border border-rose-500 rounded-2xl p-6 max-w-md w-full shadow-2xl animate-bounce">
+        <i class="fa-solid fa-triangle-exclamation text-5xl text-amber-400 mb-4"></i>
+        <h3 class="text-xl font-extrabold uppercase tracking-wide">Peringatan Anti-Nyontek!</h3>
+        <p class="mt-2 text-sm text-rose-100">Anda terdeteksi meninggalkan halaman ujian atau membuka tab/aplikasi lain!</p>
+        <div class="my-4 bg-rose-950/80 p-3 rounded-xl border border-rose-700">
+            <p class="text-xs text-rose-300">Kembali dalam waktu:</p>
+            <span id="cheatCountdown" class="text-4xl font-extrabold text-amber-400">10</span>
+            <span class="text-xs text-rose-300">detik</span>
+        </div>
+        <p class="text-xs text-rose-200">Jika waktu habis, tes Anda akan di-reset secara otomatis!</p>
+    </div>
+</div>
+
+<div id="certificateContainer" class="hidden">
+    <div id="certificatePrintArea" class="w-[1000px] h-[700px] bg-amber-50/40 p-8 border-[12px] border-double border-indigo-900 mx-auto text-slate-800 relative flex flex-col justify-between box-border">
+        <div class="text-center pt-4">
+            <h2 class="text-xs font-bold uppercase tracking-widest text-indigo-900">KAPANEWON BERBAH - KABUPATEN SLEMAN</h2>
+            <h1 class="text-3xl font-extrabold font-cert text-indigo-950 mt-1 uppercase">Sertifikat Kelulusan Sementara</h1>
+            <p class="text-xs italic text-slate-600">Latihan Tes Kemampuan Akademik (TKA) SD/MI Tahun 2026</p>
+            <div class="w-24 h-1 bg-amber-500 mx-auto my-3"></div>
+        </div>
+        <div class="text-center space-y-3 px-12">
+            <p class="text-xs text-slate-600 uppercase tracking-wider">Diberikan Kepada :</p>
+            <h3 id="certName" class="text-2xl font-bold font-cert text-slate-900 border-b border-dashed border-slate-400 pb-1 inline-block px-8">Nama Siswa</h3>
+            <div class="flex justify-center space-x-8 text-xs text-slate-700">
+                <p>No. Absen/NISN: <span id="certAbsen" class="font-bold">123</span></p>
+                <p>Asal Sekolah: <span id="certSchool" class="font-bold">SD Negeri 1</span></p>
+            </div>
+            <p class="text-xs text-slate-700 leading-relaxed mt-2 max-w-xl mx-auto">
+                Dinyatakan <strong>LULUS / MENCAPAI TARGET KETUNTASAN</strong> dalam pelaksanaan Try Out Online TKA 2026 Mata Pelajaran <strong>Bahasa Indonesia (Paket 1)</strong>.
+            </p>
+            <div class="inline-block bg-indigo-50 border border-indigo-200 rounded-xl px-6 py-2 my-2">
+                <span class="text-xs font-semibold text-indigo-800 uppercase block">Nilai Prestasi</span>
+                <span id="certScore" class="text-3xl font-extrabold text-indigo-900">85</span>
+            </div>
+        </div>
+        <div class="flex justify-between items-end pb-4 px-12 text-xs">
+            <div class="text-center">
+                <p class="text-[10px] text-slate-500 mb-8">Sistem Penilaian Otomatis CBT</p>
+                <div class="border-t border-slate-800 w-32 mx-auto pt-1 font-semibold">Panitia TKA 2026</div>
+            </div>
+            <div class="text-center">
+                <p id="certDate" class="text-[10px] text-slate-600 mb-8">Berbah, 2026</p>
+                <div class="border-t border-slate-800 w-36 mx-auto pt-1 font-semibold">Guru Pengampu</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const rawQuestions = [
+    {
+        id: 1,
+        type: "single",
+        passageTitle: "Jenderal Soedirman",
+        passage: "Jenderal Soedirman adalah sosok pahlawan besar...",
+        question: "Apa makna dedikasi pada teks tersebut?",
+        options: [
+            "peraturan dan petunjuk yang harus dilakukan",
+            "segala sesuatu yang diperlukan untuk menyampaikan maksud",
+            "pengorbanan tenaga, pikiran, dan waktu demi keberhasilan tujuan mulia",
+            "syarat dan permintaan yang harus dipenuhi untuk mencapai yang diinginkan"
+        ],
+        answer: [2]
+    },
+    {
+        id: 2,
+        type: "multiple",
+        passageTitle: "Jenderal Soedirman",
+        passage: "Dedikasi Jenderal Soedirman membuktikan...",
+        question: "Apa yang dilakukan Jenderal Soedirman untuk membuat Belanda kesulitan?\n(Jawaban benar lebih dari satu)",
+        options: [
+            "melakukan strategi perang gerilya",
+            "semangat berjuang dan keberanian melawan Belanda",
+            "bekerja sama dengan Belanda kemudian menundukkannya"
+        ],
+        answer: [0, 1]
+    }
+];
+
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/myeklrnr";
+
+let questions = [];
+let studentData = { name: '', absen: '', school: '', email: '' };
+let userAnswers = {};
+let currentQIndex = 0;
+let fontSizeStep = 0;
+let isExamActive = false;
+
+let cheatTimer = null;
+let cheatTimeLeft = 10;
+const CHEAT_LIMIT = 10;
+
+function shuffleArray(array) {
+    let arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function prepareQuestions() {
+    let shuffled = shuffleArray(rawQuestions);
+    questions = shuffled.map((q) => {
+        let questionCopy = JSON.parse(JSON.stringify(q));
+        if (questionCopy.type === 'single' || questionCopy.type === 'multiple') {
+            let originalOptions = questionCopy.options.map((opt, idx) => ({
+                text: opt,
+                isCorrect: questionCopy.answer.includes(idx)
+            }));
+            let shuffledOptions = shuffleArray(originalOptions);
+            questionCopy.options = shuffledOptions.map(o => o.text);
+            questionCopy.answer = [];
+            shuffledOptions.forEach((o, newIdx) => {
+                if (o.isCorrect) questionCopy.answer.push(newIdx);
+            });
+        }
+        return questionCopy;
+    });
+}
+
+function startExam(e) {
+    e.preventDefault();
+    studentData.name = document.getElementById('studentName').value.trim();
+    studentData.absen = document.getElementById('studentAbsen').value.trim();
+    studentData.school = document.getElementById('studentSchool').value.trim();
+    studentData.email = document.getElementById('studentEmail').value.trim();
+
+    if (!studentData.name || !studentData.absen || !studentData.school) return;
+
+    prepareQuestions();
+    userAnswers = {};
+    currentQIndex = 0;
+
+    document.getElementById('dashboardSection').classList.add('hidden');
+    document.getElementById('quizSection').classList.remove('hidden');
+    document.getElementById('topControls').classList.remove('hidden');
+    document.getElementById('studentInfoTag').innerHTML = `<i class="fa-solid fa-user-graduate mr-1"></i> ${studentData.name} (${studentData.absen})`;
+
+    renderQuestionGrid();
+    renderQuestion(currentQIndex);
+
+    isExamActive = true;
+    setupAntiCheat();
+}
+
+function renderQuestionGrid() {
+    const grid = document.getElementById('questionGrid');
+    grid.innerHTML = '';
+    questions.forEach((q, idx) => {
+        const isAnswered = isQuestionAnswered(idx);
+        const isCurrent = idx === currentQIndex;
+        let btn = document.createElement('button');
+        btn.onclick = () => jumpToQuestion(idx);
+        btn.className = `h-10 text-xs font-bold rounded-lg border transition-all flex items-center justify-center ${
+            isCurrent ? 'ring-2 ring-indigo-600 ring-offset-1 ' : ''
+        } ${
+            isAnswered 
+                ? 'bg-indigo-600 text-white border-indigo-700' 
+                : 'bg-slate-100 text-slate-700 border-slate-300 hover:bg-slate-200'
+        }`;
+        btn.innerText = idx + 1;
+        grid.appendChild(btn);
+    });
+}
+
+function isQuestionAnswered(idx) {
+    const ans = userAnswers[idx];
+    if (ans === undefined || ans === null) return false;
+    if (Array.isArray(ans)) return ans.length > 0;
+    if (typeof ans === 'object') return Object.keys(ans).length === questions[idx].rows?.length;
+    return true;
+}
+
+function renderQuestion(index) {
+    const q = questions[index];
+    document.getElementById('currentQuestionBadge').innerText = `Soal #${index + 1} / ${questions.length}`;
+    
+    const badgeMap = {
+        'single': 'Pilihan Ganda',
+        'multiple': 'Pilihan Kompleks',
+        'table': 'Tabel Benar / Salah',
+        'table_2opt': 'Tabel Kesesuaian'
+    };
+    document.getElementById('questionTypeBadge').innerText = badgeMap[q.type] || 'Soal';
+
+    const passageBox = document.getElementById('passageBox');
+    if (q.passage) {
+        document.getElementById('passageTitle').innerHTML = `<i class="fa-solid fa-file-lines mr-2 text-indigo-600"></i> ${q.passageTitle || 'Naskah Bacaan'}`;
+        document.getElementById('passageContent').innerText = q.passage;
+        passageBox.classList.remove('hidden');
+    } else {
+        passageBox.classList.add('hidden');
+    }
+
+    document.getElementById('questionText').innerText = q.question;
+    const container = document.getElementById('optionsContainer');
+    container.innerHTML = '';
+
+    if (q.type === 'single') {
+        q.options.forEach((opt, optIdx) => {
+            const isSelected = userAnswers[index] === optIdx;
+            const optEl = document.createElement('label');
+            optEl.className = `flex items-center p-3.5 border rounded-xl cursor-pointer transition ${
+                isSelected ? 'bg-indigo-50 border-indigo-600 text-indigo-900 font-medium' : 'border-slate-200 hover:bg-slate-50 text-slate-800'
+            }`;
+            optEl.innerHTML = `
+                <input type="radio" name="opt_${index}" value="${optIdx}" ${isSelected ? 'checked' : ''} 
+                    onchange="saveAnswer(${index}, ${optIdx})" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500 mr-3">
+                <span class="text-sm leading-snug">${opt}</span>
+            `;
+            container.appendChild(optEl);
+        });
+    } else if (q.type === 'multiple') {
+        const currentAns = userAnswers[index] || [];
+        q.options.forEach((opt, optIdx) => {
+            const isSelected = currentAns.includes(optIdx);
+            const optEl = document.createElement('label');
+            optEl.className = `flex items-center p-3.5 border rounded-xl cursor-pointer transition ${
+                isSelected ? 'bg-indigo-50 border-indigo-600 text-indigo-900 font-medium' : 'border-slate-200 hover:bg-slate-50 text-slate-800'
+            }`;
+            optEl.innerHTML = `
+                <input type="checkbox" value="${optIdx}" ${isSelected ? 'checked' : ''} 
+                    onchange="toggleMultipleAnswer(${index}, ${optIdx})" class="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500 mr-3">
+                <span class="text-sm leading-snug">${opt}</span>
+            `;
+            container.appendChild(optEl);
+        });
+    }
+
+    document.getElementById('btnPrev').disabled = index === 0;
+    if (index === questions.length - 1) {
+        document.getElementById('btnNext').innerHTML = `<span>Selesai</span> <i class="fa-solid fa-check text-xs"></i>`;
+        document.getElementById('btnNext').onclick = confirmFinishExam;
+    } else {
+        document.getElementById('btnNext').innerHTML = `<span>Berikutnya</span> <i class="fa-solid fa-chevron-right text-xs"></i>`;
+        document.getElementById('btnNext').onclick = () => navigateQuestion(1);
+    }
+
+    renderQuestionGrid();
+}
+
+function saveAnswer(qIdx, val) {
+    userAnswers[qIdx] = val;
+    renderQuestionGrid();
+}
+
+function toggleMultipleAnswer(qIdx, val) {
+    if (!Array.isArray(userAnswers[qIdx])) userAnswers[qIdx] = [];
+    const pos = userAnswers[qIdx].indexOf(val);
+    if (pos > -1) userAnswers[qIdx].splice(pos, 1);
+    else userAnswers[qIdx].push(val);
+    renderQuestionGrid();
+    renderQuestion(qIdx);
+}
+
+function navigateQuestion(step) {
+    const newIdx = currentQIndex + step;
+    if (newIdx >= 0 && newIdx < questions.length) {
+        currentQIndex = newIdx;
+        renderQuestion(currentQIndex);
+    }
+}
+
+function jumpToQuestion(index) {
+    currentQIndex = index;
+    renderQuestion(currentQIndex);
+}
+
+function toggleSidebar() {
+    document.getElementById('sidebarNav').classList.toggle('hidden');
+}
+
+function changeFontSize(direction) {
+    const container = document.getElementById('questionBodyContainer');
+    if (direction === 0) {
+        fontSizeStep = 0;
+        container.style.fontSize = '1rem';
+    } else {
+        fontSizeStep = Math.max(-2, Math.min(3, fontSizeStep + direction));
+        container.style.fontSize = `${1 + fontSizeStep * 0.15}rem`;
+    }
+}
+
+function togglePassageModal() {
+    document.getElementById('passageModal').classList.toggle('hidden');
+}
+
+function setupAntiCheat() {
+    window.addEventListener('blur', handleBlur);
+    window.addEventListener('focus', handleFocus);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+}
+
+function handleBlur() { if (isExamActive) triggerCheatWarning(); }
+function handleFocus() { if (isExamActive) clearCheatWarning(); }
+function handleVisibilityChange() {
+    if (isExamActive) {
+        if (document.hidden) triggerCheatWarning();
+        else clearCheatWarning();
+    }
+}
+
+function triggerCheatWarning() {
+    document.getElementById('cheatOverlay').classList.remove('hidden');
+    cheatTimeLeft = CHEAT_LIMIT;
+    document.getElementById('cheatCountdown').innerText = cheatTimeLeft;
+
+    if (cheatTimer) clearInterval(cheatTimer);
+    cheatTimer = setInterval(() => {
+        cheatTimeLeft--;
+        document.getElementById('cheatCountdown').innerText = cheatTimeLeft;
+        if (cheatTimeLeft <= 0) {
+            clearInterval(cheatTimer);
+            resetExamDueToCheating();
+        }
+    }, 1000);
+}
+
+function clearCheatWarning() {
+    if (cheatTimer) clearInterval(cheatTimer);
+    document.getElementById('cheatOverlay').classList.add('hidden');
+}
+
+function resetExamDueToCheating() {
+    isExamActive = false;
+    document.getElementById('cheatOverlay').classList.add('hidden');
+    document.getElementById('quizSection').classList.add('hidden');
+    document.getElementById('topControls').classList.add('hidden');
+    document.getElementById('dashboardSection').classList.remove('hidden');
+    alert("PERINGATAN: Anda terdeteksi meninggalkan halaman soal melebihi 10 detik! Tes Anda di-reset.");
+}
+
+function confirmFinishExam() {
+    const unanswered = questions.length - Object.keys(userAnswers).filter(idx => isQuestionAnswered(idx)).length;
+    let msg = "Apakah Anda yakin ingin menyelesaikan tes ini?";
+    if (unanswered > 0) msg = `Masih ada ${unanswered} soal belum dijawab. Yakin selesaikan?`;
+    if (confirm(msg)) finishExam();
+}
+
+function finishExam() {
+    isExamActive = false;
+
+    let correctCount = 0;
+    let formattedAnswers = [];
+
+    questions.forEach((q, idx) => {
+        const uAns = userAnswers[idx];
+        let isCorrect = false;
+
+        if (q.type === 'single') {
+            if (q.answer.includes(uAns)) isCorrect = true;
+        } else if (q.type === 'multiple') {
+            if (Array.isArray(uAns)) {
+                let sortedUser = [...uAns].sort();
+                let sortedKey = [...q.answer].sort();
+                if (JSON.stringify(sortedUser) === JSON.stringify(sortedKey)) isCorrect = true;
+            }
+        }
+
+        if (isCorrect) correctCount++;
+
+        formattedAnswers.push({
+            soal_no: idx + 1,
+            pertanyaan: q.question,
+            jawaban_siswa: uAns !== undefined ? uAns : "Tidak Dijawab",
+            status: isCorrect ? "Benar" : "Salah"
+        });
+    });
+
+    const totalQ = questions.length;
+    const finalScore = Math.round((correctCount / totalQ) * 100);
+    const wrongCount = totalQ - correctCount;
+
+    document.getElementById('quizSection').classList.add('hidden');
+    document.getElementById('topControls').classList.add('hidden');
+    document.getElementById('resultSection').classList.remove('hidden');
+
+    document.getElementById('scoreVal').innerText = finalScore;
+    document.getElementById('correctVal').innerText = correctCount;
+    document.getElementById('wrongVal').innerText = wrongCount;
+
+    document.getElementById('fsName').value = studentData.name;
+    document.getElementById('fsSchool').value = `${studentData.school} (Absen: ${studentData.absen})`;
+    document.getElementById('fsEmail').value = studentData.email || '';
+    document.getElementById('fsScore').value = `Skor: ${finalScore} / 100 (${correctCount} Benar, ${wrongCount} Salah)`;
+    document.getElementById('fsDetailAnswers').value = JSON.stringify(formattedAnswers, null, 2);
+
+    const resultHeader = document.getElementById('resultHeader');
+    const isPassed = finalScore >= 80;
+    
+    resultHeader.innerHTML = `
+        <div class="w-16 h-16 ${isPassed ? 'bg-emerald-100 text-emerald-600' : 'bg-rose-100 text-rose-600'} rounded-full flex items-center justify-center mx-auto mb-3 text-3xl">
+            <i class="fa-solid ${isPassed ? 'fa-award' : 'fa-circle-xmark'}"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-slate-800">${isPassed ? 'Selamat! Anda Lulus' : 'Belum Mencapai Target'}</h2>
+        <p class="text-xs text-slate-500 mt-1">${studentData.name} - ${studentData.school}</p>
+    `;
+
+    const resultActions = document.getElementById('resultActions');
+    resultActions.innerHTML = `
+        <button onclick="restartExam()" class="px-5 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-lg text-xs transition">
+            <i class="fa-solid fa-rotate-left mr-1.5"></i> Coba Lagi
+        </button>
+        ${isPassed ? `
+            <button onclick="printCertificate()" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold rounded-lg text-xs shadow transition">
+                <i class="fa-solid fa-print mr-1.5"></i> Cetak Sertifikat
+            </button>
+        ` : ''}
+    `;
+
+    // Auto submit to Formspree & PHP backend
+    autoSubmitResults(formattedAnswers, finalScore, correctCount, wrongCount);
+}
+
+/* Auto Submit to Formspree & PHP */
+async function autoSubmitResults(answers, score, correct, wrong) {
+    const payload = {
+        nama_siswa: studentData.name,
+        absen: studentData.absen,
+        sekolah: studentData.school,
+        email_peserta: studentData.email,
+        skor_akhir: score,
+        jawaban_benar: correct,
+        jawaban_salah: wrong,
+        rincian_jawaban: answers,
+        dikirim_pada: new Date().toLocaleString('id-ID')
+    };
+
+    try {
+        // 1. Submit to Formspree
+        fetch(FORMSPREE_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        // 2. Optional Submit to Local PHP Backend File
+        fetch('simpan_nilai.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        }).catch(() => {}); // Optional silent fallback
+    } catch(err) {
+        console.error(err);
+    }
+}
+
+async function submitFormspree(e) {
+    e.preventDefault();
+    const btn = document.getElementById('fsSubmitBtn');
+    const statusMsg = document.getElementById('fsStatusMsg');
+    const form = document.getElementById('formspreeForm');
+
+    btn.disabled = true;
+    btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> <span>Mengirim...</span>`;
+
+    const formData = new FormData(form);
+
+    try {
+        const response = await fetch(FORMSPREE_ENDPOINT, {
+            method: 'POST',
+            body: formData,
+            headers: { 'Accept': 'application/json' }
+        });
+
+        if (response.ok) {
+            statusMsg.className = "mt-3 p-3 rounded-lg text-xs text-center font-medium bg-emerald-100 text-emerald-800 border border-emerald-300";
+            statusMsg.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> Berhasil! Hasil ujian telah dikirimkan ke Formspree.`;
+            statusMsg.classList.remove('hidden');
+        } else {
+            throw new Error('Gagal mengirim formulir.');
+        }
+    } catch (err) {
+        statusMsg.className = "mt-3 p-3 rounded-lg text-xs text-center font-medium bg-rose-100 text-rose-800 border border-rose-300";
+        statusMsg.innerHTML = `<i class="fa-solid fa-circle-exclamation text-rose-600 mr-1"></i> Terjadi kesalahan: ${err.message}`;
+        statusMsg.classList.remove('hidden');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> <span>Kirim Ulang Hasil Manual ke Formspree</span>`;
+    }
+}
+
+function restartExam() {
+    document.getElementById('resultSection').classList.add('hidden');
+    document.getElementById('dashboardSection').classList.remove('hidden');
+}
+
+function printCertificate() {
+    document.getElementById('certName').innerText = studentData.name;
+    document.getElementById('certAbsen').innerText = studentData.absen;
+    document.getElementById('certSchool').innerText = studentData.school;
+    document.getElementById('certScore').innerText = document.getElementById('scoreVal').innerText;
+    
+    const certContent = document.getElementById('certificatePrintArea').outerHTML;
+    const printWindow = window.open('', '_blank', 'width=1050,height=750');
+    printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Sertifikat - ${studentData.name}</title>
+            <script src="https://cdn.tailwindcss.com"><\/script>
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
+            <style>
+                body { font-family: 'Inter', sans-serif; display:flex; justify-content:center; align-items:center; min-height:100vh; margin:0; background:#fff; }
+                .font-cert { font-family: 'Cinzel', serif; }
+                @media print { body { background: none; } @page { size: landscape; margin: 0; } }
+            </style>
+        </head>
+        <body>
+            ${certContent}
+            <script>window.onload = function() { window.print(); }<\/script>
+        </body>
+        </html>
+    `);
+    printWindow.document.close();
+}
+</script>
+</body>
+</html>

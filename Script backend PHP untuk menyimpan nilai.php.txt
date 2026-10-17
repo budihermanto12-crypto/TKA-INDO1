@@ -1,0 +1,32 @@
+<?php
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Headers: Content-Type');
+
+// Capture raw JSON payload from fetch request
+$inputJSON = file_get_contents('php://input');
+$data = json_decode($inputJSON, true);
+
+if (!$data) {
+    echo json_encode(["status" => "error", "message" => "Data tidak valid atau kosong"]);
+    exit;
+}
+
+$file = 'hasil_jawaban_siswa.txt';
+
+$logData = "========================================\n";
+$logData .= "WAKTU         : " . ($data['dikirim_pada'] ?? date('Y-m-d H:i:s')) . "\n";
+$logData .= "NAMA SISWA    : " . ($data['nama_siswa'] ?? '-') . "\n";
+$logData .= "ABSEN         : " . ($data['absen'] ?? '-') . "\n";
+$logData .= "SEKOLAH       : " . ($data['sekolah'] ?? '-') . "\n";
+$logData .= "EMAIL         : " . ($data['email_peserta'] ?? '-') . "\n";
+$logData .= "SKOR AKHIR    : " . ($data['skor_akhir'] ?? 0) . "\n";
+$logData .= "BENAR / SALAH : " . ($data['jawaban_benar'] ?? 0) . " / " . ($data['jawaban_salah'] ?? 0) . "\n";
+$logData .= "RINCIAN JAWABAN:\n";
+$logData .= json_encode($data['rincian_jawaban'] ?? [], JSON_PRETTY_PRINT) . "\n";
+$logData .= "========================================\n\n";
+
+file_put_contents($file, $logData, FILE_APPEND | LOCK_EX);
+
+echo json_encode(["status" => "success", "message" => "Nilai dan jawaban siswa berhasil disimpan!"]);
+?>
